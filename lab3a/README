@@ -1,0 +1,21 @@
+Ziheng Yang
+204584728
+Lab3a
+
+Limitations:
+In order to comply with the spec, there are the limitations:
+- strictly only traverses indirect blocks that are known to be allocated from
+the inode num block field
+- for whatever reason, if I print out the entire name for each directory, the
+string has some additional characters at the end. not sure why, but printing
+just the exact number of characters defined by the name_len field will result in
+the correct name
+- for the directory part of the assignment, we ignore the num block information
+for the inode and stick to the actual number of allocated nodes -- this is
+probably due to the fact that the disk image is damaged
+
+Features:
+All aspects of the spec implemented
+
+Testing:
+Tested output against provided csv files

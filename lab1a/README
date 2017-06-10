@@ -1,0 +1,22 @@
+Project 1A
+
+lab1a.c:
+- single source file, default behavior is to turn the terminal into
+non-canonical, no echo mode. using --shell argument, the terminal is still in
+that same mode but the input is sent to a separate running bash process, whose
+output is then printed out to the console. this entails that commands can be
+executed in the other bash console, and the corresponding results will be
+displayed.
+- in terms of testing, sent signals using the ps command to check the pid of the
+child process and using the corresponding pid to send the signal. also used $?
+to check the return code of the program to make sure it's behaving as
+expected. aside from sending signals, i just tried a bunch of commands and typed
+a bunch of stuff to see that the terminal was behaving as expected.
+* submitted two days late because busy schedule & my own negligence and the fact
+that I underestimated how confusing the spec is
+
+Makefile:
+- has make, clean, and dist options
+- make option compiles c file with the -pthread option
+- clean just removes the executable
+- dist packages the source file, Makefile, and README into a tar.gz

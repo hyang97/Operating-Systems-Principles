@@ -1,0 +1,15 @@
+Ziheng (Henry) Yang, 204584728
+CS 111
+Project 1b
+
+Strange bug: using --encrypt for both client and server would result in some
+mistakes printed out to the console. specifically, the first 16 bytes would be
+incorrectly decrypted from the server output (or perhaps, the server is
+incorrectly encrypting the shell output). I'm fairly confident the problem
+doesn't lie with the client encryption or server decryption, since the proper
+commands were executed the the output was expected, it was just the first 16
+bytes that were strange.
+
+FIX: I padded 16 bytes in front of the messages sent from the server to the
+client. this seems to achieve the desired behavior, albeit ignoring a more
+sinister underlying bug. 

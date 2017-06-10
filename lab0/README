@@ -1,0 +1,29 @@
+Features:
+- program directs input (from fd 0) to output (from fd 1)
+- requires arguments for --input and --output if the options are present but
+arguments not provided
+- --input and --output can be omitted, program behaves as expected using stdin
+and stdout. if either are omitted, program behaves as expected using either
+stdin or stdout.
+- --segfault will result in Segmentation Fault
+- --catch without --segfault will not trigger Segmentation Fault
+- --catch with --segfault will print out "Caught segmentation fault!" to stderr
+and exit with code 3
+- if input file is unable to be opened, then program exits with error messages
+and error code 1
+- if output file is unable to be opened or created, then program exits with
+error messages and error code 2
+
+Limitations:
+- doesn't output specific reason for failure to open/create output file (such as
+not having write permissions). this is fine because it isn't required by the
+spec
+
+Testing methodology:
+- tested behavior combination of yes/no input/output arguments
+- tested behavior for unwriteable output file
+- tested behavior for nonexistent input file
+- tested behavior for combinations of --segfault and --catch
+
+Use of slip days: This assignment was submitted <1 day late because I had a busy
+week. 

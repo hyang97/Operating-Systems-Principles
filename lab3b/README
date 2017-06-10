@@ -1,0 +1,26 @@
+Ziheng Yang
+204584728
+Lab 3B
+
+To run the program, either do
+- python lab3b.py, or
+- make, or
+- make run
+
+Included files:
+lab3b.py
+- returns all 7 instances of the error types given the csv files
+Makefile
+- has commands make, make run, make check, make clean, make dist
+- make: runs lab3b.py
+- make run: runs lab3b.py
+- make check: checks with provided lab3b_check.txt from the spec, only works in
+my directory 
+- make clean: removes all generated files
+- make dist: builds tarball
+README:
+- this is this file
+
+Testing methodology:
+- used make check to run a shell script that sorts both my output and the
+provided correct output and then generates diff, echoes "PASS" if diff is empty

@@ -1,0 +1,172 @@
+Total: 250 samples
+     176  70.4%  70.4%      250 100.0% threadFunction
+      51  20.4%  90.8%       51  20.4% __strncmp_sse42
+       9   3.6%  94.4%       43  17.2% SortedList_insert
+       9   3.6%  98.0%       31  12.4% SortedList_lookup
+       5   2.0% 100.0%        5   2.0% _init
+       0   0.0% 100.0%      250 100.0% __clone
+       0   0.0% 100.0%      250 100.0% start_thread
+ROUTINE ====================== threadFunction in /u/cs/ugrad/zihengy/cs111/proj2b/lab2_list.c
+   176    250 Total samples (flat / cumulative)
+     .      .   53:   list.key = NULL;
+     .      .   54:   list.next = NULL;
+     .      .   55:   list.prev = NULL;
+     .      .   56: }
+     .      .   57: 
+---
+     .      .   58: void *threadFunction(void *args){
+     .      .   59:   int startIndex = *((int *)args)*numIterations;
+     .      .   60:   int endIndex = startIndex + numIterations;
+     .      .   61:   
+     .      .   62:   //insert elements into linked list
+     .      .   63:   for(int i = startIndex; i < endIndex; i++){
+     .      .   64:     if(syncMutex == 1){
+     .      .   65:       pthread_mutex_lock(&lock);
+     .      .   66:       SortedList_insert(&list, &(elements[i]));
+     .      .   67:       pthread_mutex_unlock(&lock);
+     .      .   68:     }
+     .      .   69:     else if(syncSpin == 1){
+   140    140   70:       while(__sync_lock_test_and_set(&spinlock, 1) == 1);
+     .     43   71:       SortedList_insert(&list, &(elements[i]));
+     .      .   72:       __sync_lock_release(&spinlock);
+     .      .   73:     }
+     .      .   74:     else
+     .      .   75:       SortedList_insert(&list, &(elements[i]));
+     .      .   76:   }
+     .      .   77: 
+     .      .   78:   //get the length of the linked list
+     .      .   79:   int length = 0;
+     .      .   80:   if(syncMutex == 1){
+     .      .   81:     pthread_mutex_lock(&lock);
+     .      .   82:     length = SortedList_length(&list);
+     .      .   83:     pthread_mutex_unlock(&lock);
+     .      .   84:   }
+     .      .   85:   else if(syncSpin == 1){
+     .      .   86:     while(__sync_lock_test_and_set(&spinlock, 1) == 1);
+     .      .   87:     length = SortedList_length(&list);
+     .      .   88:     __sync_lock_release(&spinlock);
+     .      .   89:   }
+     .      .   90:   else
+     .      .   91:     length = SortedList_length(&list);
+     .      .   92:   if(length < 0)
+     .      .   93:     exit(10);
+     .      .   94: 
+     .      .   95:   //remove all elements from linked list
+     .      .   96:   for(int i = startIndex; i < endIndex; i++){
+     .      .   97:     if(syncMutex == 1){
+     .      .   98:       pthread_mutex_lock(&lock);
+     .      .   99:       SortedListElement_t *temp = SortedList_lookup(&list, elements[i].key);
+     .      .  100:       if(temp == NULL)
+     .      .  101:         exit(11);
+     .      .  102:       if(SortedList_delete(temp) == 1)
+     .      .  103:         exit(1);
+     .      .  104:       pthread_mutex_unlock(&lock);
+     .      .  105:     }
+     .      .  106:     else if(syncSpin == 1){
+    36     36  107:       while(__sync_lock_test_and_set(&spinlock, 1) == 1);
+     .     31  108:       SortedListElement_t *temp = SortedList_lookup(&list, elements[i].key);
+     .      .  109:       if(temp == NULL)
+     .      .  110:         exit(13);
+     .      .  111:       if(SortedList_delete(temp) == 1)
+     .      .  112:         exit(14);
+     .      .  113:       __sync_lock_release(&spinlock);
+     .      .  114:     }
+     .      .  115:     else{
+     .      .  116:       SortedListElement_t *temp = SortedList_lookup(&list, elements[i].key);
+     .      .  117:       if(temp == NULL)
+     .      .  118: 	exit(15);
+     .      .  119:       if(SortedList_delete(temp) == 1)
+     .      .  120: 	exit(16);
+     .      .  121:     }
+     .      .  122:   }
+     .      .  123: 
+     .      .  124:   return (void*)(long)length;
+     .      .  125: }
+---
+     .      .  126: 
+     .      .  127: int main(int argc, char **argv){
+     .      .  128: 
+     .      .  129:   atexit(exitFunction);
+     .      .  130: 
+ROUTINE ====================== threadFunction in /u/cs/ugrad/zihengy/cs111/proj2b/lab2_list.c
+   176    250 Total samples (flat / cumulative)
+     .      .   53:   list.key = NULL;
+     .      .   54:   list.next = NULL;
+     .      .   55:   list.prev = NULL;
+     .      .   56: }
+     .      .   57: 
+---
+     .      .   58: void *threadFunction(void *args){
+     .      .   59:   int startIndex = *((int *)args)*numIterations;
+     .      .   60:   int endIndex = startIndex + numIterations;
+     .      .   61:   
+     .      .   62:   //insert elements into linked list
+     .      .   63:   for(int i = startIndex; i < endIndex; i++){
+     .      .   64:     if(syncMutex == 1){
+     .      .   65:       pthread_mutex_lock(&lock);
+     .      .   66:       SortedList_insert(&list, &(elements[i]));
+     .      .   67:       pthread_mutex_unlock(&lock);
+     .      .   68:     }
+     .      .   69:     else if(syncSpin == 1){
+   140    140   70:       while(__sync_lock_test_and_set(&spinlock, 1) == 1);
+     .     43   71:       SortedList_insert(&list, &(elements[i]));
+     .      .   72:       __sync_lock_release(&spinlock);
+     .      .   73:     }
+     .      .   74:     else
+     .      .   75:       SortedList_insert(&list, &(elements[i]));
+     .      .   76:   }
+     .      .   77: 
+     .      .   78:   //get the length of the linked list
+     .      .   79:   int length = 0;
+     .      .   80:   if(syncMutex == 1){
+     .      .   81:     pthread_mutex_lock(&lock);
+     .      .   82:     length = SortedList_length(&list);
+     .      .   83:     pthread_mutex_unlock(&lock);
+     .      .   84:   }
+     .      .   85:   else if(syncSpin == 1){
+     .      .   86:     while(__sync_lock_test_and_set(&spinlock, 1) == 1);
+     .      .   87:     length = SortedList_length(&list);
+     .      .   88:     __sync_lock_release(&spinlock);
+     .      .   89:   }
+     .      .   90:   else
+     .      .   91:     length = SortedList_length(&list);
+     .      .   92:   if(length < 0)
+     .      .   93:     exit(10);
+     .      .   94: 
+     .      .   95:   //remove all elements from linked list
+     .      .   96:   for(int i = startIndex; i < endIndex; i++){
+     .      .   97:     if(syncMutex == 1){
+     .      .   98:       pthread_mutex_lock(&lock);
+     .      .   99:       SortedListElement_t *temp = SortedList_lookup(&list, elements[i].key);
+     .      .  100:       if(temp == NULL)
+     .      .  101:         exit(11);
+     .      .  102:       if(SortedList_delete(temp) == 1)
+     .      .  103:         exit(1);
+     .      .  104:       pthread_mutex_unlock(&lock);
+     .      .  105:     }
+     .      .  106:     else if(syncSpin == 1){
+    36     36  107:       while(__sync_lock_test_and_set(&spinlock, 1) == 1);
+     .     31  108:       SortedListElement_t *temp = SortedList_lookup(&list, elements[i].key);
+     .      .  109:       if(temp == NULL)
+     .      .  110:         exit(13);
+     .      .  111:       if(SortedList_delete(temp) == 1)
+     .      .  112:         exit(14);
+     .      .  113:       __sync_lock_release(&spinlock);
+     .      .  114:     }
+     .      .  115:     else{
+     .      .  116:       SortedListElement_t *temp = SortedList_lookup(&list, elements[i].key);
+     .      .  117:       if(temp == NULL)
+     .      .  118: 	exit(15);
+     .      .  119:       if(SortedList_delete(temp) == 1)
+     .      .  120: 	exit(16);
+     .      .  121:     }
+     .      .  122:   }
+     .      .  123: 
+     .      .  124:   return (void*)(long)length;
+     .      .  125: }
+---
+     .      .  126: 
+     .      .  127: int main(int argc, char **argv){
+     .      .  128: 
+     .      .  129:   atexit(exitFunction);
+     .      .  130: 
